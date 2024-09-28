@@ -2,8 +2,12 @@ namespace Core.Entities;
 
 public class Address : BaseEntity
 {
-    public required string Street { get; set; }
-    public required string County { get; set; }
-    public required string City { get; set; }
-    public string? Description { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Street { get; set; } = string.Empty;
+    public string County { get; set; } = string.Empty;
+    public string City { get; set; } = string.Empty;
+    public string AddressDescription { get; set; } = string.Empty;
+    
+    // required foreign key
+    public int BusinessId { get; set; }
 }
