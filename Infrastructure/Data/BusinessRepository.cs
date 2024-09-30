@@ -16,7 +16,8 @@ public class BusinessRepository(DataContext context) : IBusinessRepository
     public async Task<Business?> GetBusinessByIdAsync(int id)
     {
         return await context.Business
-            .Include(b => b.Products).Include(b => b.Addresses)
+            .Include(b => b.Products)
+            .Include(b => b.Addresses)
             .Include(b=>b.ContactInfo).ThenInclude(c => c.AuthorizedPersonnel)
             .SingleOrDefaultAsync(b => b.Id == id);
     }
@@ -24,6 +25,7 @@ public class BusinessRepository(DataContext context) : IBusinessRepository
     public void CreateBusiness(Business business)
     {
         context.Business.Add(business);
+        context.SaveChanges();
     }
 
     public void UpdateBusiness(Business business)
