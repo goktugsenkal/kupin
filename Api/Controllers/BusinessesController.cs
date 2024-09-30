@@ -27,9 +27,19 @@ public class BusinessesController(IBusinessRepository businessRepository) : Cont
     }
 
     [HttpPost]
-    public ActionResult<Business> CreateBusiness(CreateBusinessDto business)
+    public ActionResult<Business> CreateBusiness(CreateBusinessDto businessForCreate)
     {
-        throw new NotImplementedException();
+        var business = new Business
+        {
+        Name = businessForCreate.Name,
+        Description = businessForCreate.Description,
+        ImageUrl = businessForCreate.ImageUrl ?? "https://placehold.co/200x200?text=business",
+        BusinessType = businessForCreate.BusinessType,
+        IsActive = false
+        };
+        
+        businessRepository.CreateBusiness(business);
+        return CreatedAtAction(nameof(GetBusinessById), new { id = business.Id }, business);
     }
 
     [HttpPut("{id:int}")]
