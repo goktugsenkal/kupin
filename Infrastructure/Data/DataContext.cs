@@ -38,4 +38,11 @@ public class DataContext : DbContext
             .HasForeignKey(e => e.ContactInfoId)
             .IsRequired();
     }
+    
+    public DbSet<Business> Business { get; set; }
+    public DbSet<ContactInfo> ContactInfo { get; set; }
+    public DbSet<Address> Address { get; set; }
+    public DbSet<Product> Product { get; set; }
+    public DbSet<Official> Official { get; set; }
+
 }
