@@ -18,7 +18,8 @@ public class BusinessRepository(DataContext context) : IBusinessRepository
         return await context.Business
             .Include(b => b.Products)
             .Include(b => b.Addresses)
-            .Include(b=>b.ContactInfo).ThenInclude(c => c.AuthorizedPersonnel)
+            .Include(b=>b.ContactInfo)
+                .ThenInclude(c => c.AuthorizedPersonnel)
             .SingleOrDefaultAsync(b => b.Id == id);
     }
 
