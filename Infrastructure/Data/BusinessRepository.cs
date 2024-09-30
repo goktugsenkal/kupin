@@ -30,11 +30,13 @@ public class BusinessRepository(DataContext context) : IBusinessRepository
 
     public void UpdateBusiness(Business business)
     {
-        throw new NotImplementedException();
+        context.Business.Update(business);
+        context.SaveChanges();
     }
 
     public void DeleteBusiness(Business business)
     {
         context.Business.Remove(business);
+        context.SaveChanges();
     }
 }
