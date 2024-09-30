@@ -43,14 +43,31 @@ public class BusinessesController(IBusinessRepository businessRepository) : Cont
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult<Business> UpdateBusiness(UpdateBusinessDto business, int id)
+    public async Task<ActionResult<Business>> UpdateBusiness(UpdateBusinessDto businessForUpdate, int id)
     {
-        throw new NotImplementedException();
+        if (id != businessForUpdate.Id) { return BadRequest(); }
+        
+        var business = await businessRepository.GetBusinessByIdAsync(id);
+        
+        if (business == null) { return BadRequest(); }
+        
+        business.Name = businessForUpdate.Name;
+        business.Description = businessForUpdate.Description;
+        business.ImageUrl = businessForUpdate.ImageUrl ?? "https://placehold.co/200x200?text=business";
+        business.BusinessType = businessForUpdate.BusinessType;
+        business.IsActive = business.IsActive;
+        
+        businessRepository.UpdateBusiness(business);
+        return Ok(business);
     }
 
     [HttpDelete("{id:int}")]
-    public ActionResult DeleteBusiness(int id)
+    public async Task<ActionResult> DeleteBusiness(int id)
     {
-        throw new NotImplementedException();
+        var business = await businessRepository.GetBusinessByIdAsync(id);
+        
+        if (business != null) businessRepository.DeleteBusiness(business);
+
+        return Ok();
     }
 }
