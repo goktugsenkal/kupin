@@ -1,23 +1,29 @@
 using Api.Dtos;
 using Core.Entities;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
 [ApiController]
 [Route("api/business")]
-public class BusinessesController : ControllerBase
+public class BusinessesController(IBusinessRepository businessRepository) : ControllerBase
 {
     [HttpGet]
-    public Task<ActionResult<IReadOnlyList<Business>>> GetBusinesses()
+    public async Task<ActionResult<IReadOnlyList<Business>>> GetBusinesses()
     {
-        throw new NotImplementedException();
+        var businesses = await businessRepository.GetAllBusinessesAsync();
+        
+        return Ok(businesses);
     }
 
     [HttpGet("{id:int}")]
-    public Task<ActionResult<Business>> GetBusinessById()
+    public async Task<ActionResult<Business>> GetBusinessById(int id)
     {
-        throw new NotImplementedException();
+        var business = await businessRepository.GetBusinessByIdAsync(id);
+        if (business == null) { return NotFound(); }
+        
+        return Ok(business);
     }
 
     [HttpPost]
