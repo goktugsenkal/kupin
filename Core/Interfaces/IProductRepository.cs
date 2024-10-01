@@ -4,9 +4,9 @@ namespace Core.Interfaces;
 
 public interface IProductRepository
 {
-    Task<IReadOnlyList<Product>> GetAllProducts(int businessId);
-    Task<Product?> GetProductById(int businessId, int productId);
+    Task<IReadOnlyList<Product>> GetAllProductsAsync(int businessId);
+    Task<Product?> GetProductByIdAsync(int businessId, int productId);
     void CreateProduct(Product product);
-    void UpdateProduct(int businessId, int productId, Product product);
-    void DeleteProduct(int businessId, int productId);
+    void UpdateProduct(Product product);
+    void DeleteProduct(Product product);
 }

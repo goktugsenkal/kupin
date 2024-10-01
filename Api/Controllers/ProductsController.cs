@@ -14,7 +14,7 @@ public class ProductsController(IProductRepository productRepository) : Controll
         (int businessId)
     {
         var products = await productRepository
-            .GetAllProducts(businessId);
+            .GetAllProductsAsync(businessId);
 
         return Ok(products);
     }
@@ -24,7 +24,7 @@ public class ProductsController(IProductRepository productRepository) : Controll
         (int businessId, int productId)
     {
         var product = await productRepository
-            .GetProductById(businessId, productId);
+            .GetProductByIdAsync(businessId, productId);
 
         if (product == null) return NotFound();
 
@@ -46,5 +46,34 @@ public class ProductsController(IProductRepository productRepository) : Controll
         
         productRepository.CreateProduct(product);
         return Ok(product);
+    }
+
+    [HttpPut("{productId:int}")]
+    public async Task<ActionResult<Product>> UpdateProduct
+        (int businessId, int productId, UpdateProductDto productForUpdate)
+    {
+        if(productForUpdate.Id != productId) return BadRequest();
+        
+        var product = await productRepository.GetProductByIdAsync(businessId, productId);
+        
+        if (product == null) return NotFound();
+        
+        product.Name = productForUpdate.Name;
+        product.Description = productForUpdate.Description;
+        product.ImageUrl = productForUpdate.ImageUrl;
+        product.QuantityInStock = productForUpdate.QuantityInStock;
+        
+        productRepository.UpdateProduct(product);
+        return Ok(product);
+    }
+
+    [HttpDelete("{productId:int}")]
+    public async Task<ActionResult> DeleteProduct(int businessId, int productId)
+    {
+        var product = await productRepository.GetProductByIdAsync(businessId, productId);
+        
+        if(product != null) { productRepository.DeleteProduct(product); }
+
+        return Ok();
     }
 }

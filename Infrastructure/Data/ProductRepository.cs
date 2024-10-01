@@ -6,14 +6,14 @@ namespace Infrastructure.Data;
 
 public class ProductRepository(DataContext context) : IProductRepository
 {
-    public async Task<IReadOnlyList<Product>> GetAllProducts(int businessId)
+    public async Task<IReadOnlyList<Product>> GetAllProductsAsync(int businessId)
     {
         return await context.Product
             .Where(p => p.BusinessId == businessId)
             .ToListAsync();
     }
 
-    public async Task<Product?> GetProductById(int businessId, int productId)
+    public async Task<Product?> GetProductByIdAsync(int businessId, int productId)
     {
         return await context.Product
             .Where(p => p.BusinessId == businessId)
@@ -27,13 +27,15 @@ public class ProductRepository(DataContext context) : IProductRepository
         context.SaveChanges();
     }
 
-    public void UpdateProduct(int businessId, int productId, Product product)
+    public void UpdateProduct(Product product)
     {
-        throw new NotImplementedException();
+        context.Product.Update(product);
+        context.SaveChanges();
     }
 
-    public void DeleteProduct(int businessId, int productId)
+    public void DeleteProduct(Product product)
     {
-        throw new NotImplementedException();
+        context.Product.Remove(product);
+        context.SaveChanges();
     }
 }
