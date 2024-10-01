@@ -45,11 +45,11 @@ public class BusinessesController(IBusinessRepository businessRepository) : Cont
     [HttpPut("{id:int}")]
     public async Task<ActionResult<Business>> UpdateBusiness(UpdateBusinessDto businessForUpdate, int id)
     {
-        if (id != businessForUpdate.Id) { return BadRequest(); }
+        if (id != businessForUpdate.Id)  return BadRequest(); 
         
         var business = await businessRepository.GetBusinessByIdAsync(id);
         
-        if (business == null) { return BadRequest(); }
+        if (business == null) return BadRequest(); 
         
         business.Name = businessForUpdate.Name;
         business.Description = businessForUpdate.Description;
