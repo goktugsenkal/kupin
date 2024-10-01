@@ -21,12 +21,8 @@ public class ProductRepository(DataContext context) : IProductRepository
             .FirstOrDefaultAsync();
     }
 
-    public void CreateProduct(int businessId, Product product)
+    public void CreateProduct(Product product)
     {
-        if (product.BusinessId != businessId)
-        {
-            throw new ArgumentException("business id'ler uyuşmuyor.");
-        }
         context.Product.Add(product);
         context.SaveChanges();
     }

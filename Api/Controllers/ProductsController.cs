@@ -44,7 +44,7 @@ public class ProductsController(IProductRepository productRepository) : Controll
             QuantityInStock = productForCreate.QuantityInStock
         };
         
-        productRepository.CreateProduct(businessId, product);
+        productRepository.CreateProduct(product);
         return Ok(product);
     }
 }
