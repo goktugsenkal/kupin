@@ -6,6 +6,9 @@ namespace Infrastructure.Data;
 
 public class ContactInfoRepository(DataContext context) : IContactInfoRepository
 {
+    //
+    // ContactInfo Table Queries
+    //
     public async Task<IReadOnlyList<ContactInfo>> GetAllContactInfoAsync(int businessId)
     {
         return await context.ContactInfo
@@ -24,12 +27,13 @@ public class ContactInfoRepository(DataContext context) : IContactInfoRepository
 
     public void CreateContactInfo(ContactInfo contactInfo)
     {
-        throw new NotImplementedException();
+        context.ContactInfo.Add(contactInfo);
+        context.SaveChanges();
     }
 
     public void UpdateContactInfo(ContactInfo contactInfo)
     {
-        throw new NotImplementedException();
+        
     }
 
     public void DeleteContactInfo(ContactInfo contactInfo)
