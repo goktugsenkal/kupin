@@ -26,4 +26,11 @@ public class ContactInfoController
         
         return Ok(contactInfo);
     }
+
+    [HttpPost]
+    public ActionResult<ContactInfo> CreateContactInfo(ContactInfo contactInfo)
+    {
+        contactInfoRepository.CreateContactInfo(contactInfo);
+        return Ok(contactInfo);
+    }
 }
