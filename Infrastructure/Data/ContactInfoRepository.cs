@@ -6,15 +6,13 @@ namespace Infrastructure.Data;
 
 public class ContactInfoRepository(DataContext context) : IContactInfoRepository
 {
-    //
-    // ContactInfo Table Queries
-    //
     public async Task<IReadOnlyList<ContactInfo>> GetAllContactInfoAsync(int businessId)
     {
         return await context.ContactInfo
             .Where(ci => ci.BusinessId == businessId)
+            .Include(ci => ci.AuthorizedPersonnel)
             .ToListAsync();
-    }
+    }   
 
     public async Task<ContactInfo?> GetContactInfoByIdAsync(int businessId, int contactInfoId)
     {
@@ -33,43 +31,13 @@ public class ContactInfoRepository(DataContext context) : IContactInfoRepository
 
     public void UpdateContactInfo(ContactInfo contactInfo)
     {
-        
+        context.ContactInfo.Update(contactInfo);
+        context.SaveChanges();
     }
 
     public void DeleteContactInfo(ContactInfo contactInfo)
     {
-        throw new NotImplementedException();
-    }
-    
-    //
-    // Official Table Queries
-    //
-    
-    public async Task<IReadOnlyList<Official>> GetAllOfficialsAsync(int contactInfoId)
-    {
-        return await context.Official
-            .Where(o => o.Id == contactInfoId)
-            .ToListAsync();
-    }
-
-    public Task<Official> GetOfficialByIdAsync
-        (int businessId, int contactInfoId, int officialId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void CreateOfficial(Official official)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void UpdateOfficial(Official official)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void DeleteOfficial(Official official)
-    {
-        throw new NotImplementedException();
+        context.ContactInfo.Remove(contactInfo);
+        context.SaveChanges();
     }
 }
