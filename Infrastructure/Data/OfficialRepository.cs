@@ -6,31 +6,51 @@ namespace Infrastructure.Data;
 
 public class OfficialRepository(DataContext context) : IOfficialRepository
 {
-    public async Task<IReadOnlyList<Official>> GetAllOfficialsAsync(int contactInfoId)
+    public async Task<IReadOnlyList<Official>> GetAllOfficialsAsync(int businessId)
     {
-        return await context.Official
-            .Where(o => o.Id == contactInfoId)
+        var contactInfo = await context.ContactInfo
+            .Where(ci => ci.BusinessId == businessId)
+            .FirstOrDefaultAsync();
+
+        if (contactInfo == null) return [];
+
+        var officials = await context.Official
+            .Where(o => o.ContactInfoId == contactInfo.Id)
             .ToListAsync();
+
+        return officials;
     }
 
-    public Task<Official> GetOfficialByIdAsync
-        (int businessId, int contactInfoId, int officialId)
+    public async Task<Official?> GetOfficialByIdAsync
+        (int businessId, int officialId)
     {
-        throw new NotImplementedException();
+        var contactInfo = await context.ContactInfo
+            .Where(ci => ci.BusinessId == businessId)
+            .FirstOrDefaultAsync();
+
+        if (contactInfo == null) return null;
+        
+        return await context.Official
+            .Where(o => o.Id == officialId)
+            .Where(o => o.ContactInfoId == contactInfo.Id)
+            .FirstOrDefaultAsync();
     }
 
     public void CreateOfficial(Official official)
     {
-        throw new NotImplementedException();
+        context.Official.Add(official);
+        context.SaveChanges();
     }
 
     public void UpdateOfficial(Official official)
     {
-        throw new NotImplementedException();
+        context.Official.Update(official);
+        context.SaveChanges();
     }
 
     public void DeleteOfficial(Official official)
     {
-        throw new NotImplementedException();
+        context.Official.Remove(official);
+        context.SaveChanges();
     }
 }
