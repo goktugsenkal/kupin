@@ -1,5 +1,6 @@
 using Api.Dtos;
 using Core.Entities;
+using Core.Helpers;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +11,14 @@ namespace Api.Controllers;
 public class BusinessesController(IBusinessRepository businessRepository) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<Business>>> GetBusinesses()
+    public async Task<ActionResult<PagedList<Business>>> GetBusinesses
+        (int pageIndex = 1, int pageSize = 10)
     {
-        var businesses = await businessRepository.GetAllBusinessesAsync();
+        if (pageSize > 20) return BadRequest("20'den fazla işletme istenemez");
+        if (pageIndex < 1) return BadRequest("Sayfalar 1'den başlar");
+        
+        var businesses = await businessRepository
+            .GetAllBusinessesAsync(pageIndex, pageSize);
         
         return Ok(businesses);
     }
