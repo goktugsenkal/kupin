@@ -1,5 +1,6 @@
 using Api.Dtos;
 using Core.Entities;
+using Core.Helpers;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,11 @@ namespace Api.Controllers;
 public class ProductsController(IProductRepository productRepository) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts
-        (int businessId)
+    public async Task<ActionResult<PagedList<Product>>> GetProducts
+        (int businessId, int pageIndex, int pageSize)
     {
         var products = await productRepository
-            .GetAllProductsAsync(businessId);
+            .GetAllProductsAsync(businessId, pageIndex, pageSize);
 
         return Ok(products);
     }

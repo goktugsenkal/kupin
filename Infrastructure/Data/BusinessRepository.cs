@@ -1,4 +1,5 @@
 using Core.Entities;
+using Core.Helpers;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,11 +7,19 @@ namespace Infrastructure.Data;
 
 public class BusinessRepository(DataContext context) : IBusinessRepository
 {
-    public async Task<IReadOnlyList<Business>> GetAllBusinessesAsync()
+    public async Task<PagedList<Business>> GetAllBusinessesAsync
+        (int pageIndex, int pageSize)
     {
-        return await context.Business
-                // .Include(b => b.Products) <-- INCLUDE STATEMENTS HERE <--
+        var businesses = await context.Business
+            .OrderBy(b => b.Id)
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        var count = await context.Business.CountAsync();
+        var totalPages = (int)Math.Ceiling(count / (double)pageSize);
+
+        return new PagedList<Business>(businesses, pageIndex, totalPages);
     }
 
     public async Task<Business?> GetBusinessByIdAsync(int id)

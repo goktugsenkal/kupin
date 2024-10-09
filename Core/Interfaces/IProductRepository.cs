@@ -1,10 +1,12 @@
 using Core.Entities;
+using Core.Helpers;
 
 namespace Core.Interfaces;
 
 public interface IProductRepository
 {
-    Task<IReadOnlyList<Product>> GetAllProductsAsync(int businessId);
+    Task<PagedList<Product>> GetAllProductsAsync
+        (int businessId, int pageIndex, int pageSize);
     Task<Product?> GetProductByIdAsync(int businessId, int productId);
     void CreateProduct(Product product);
     void UpdateProduct(Product product);
