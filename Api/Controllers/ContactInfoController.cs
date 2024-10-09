@@ -7,7 +7,8 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/business/{businessId:int}/contactInfo")]
-public class ContactInfoController(IContactInfoRepository contactInfoRepository) : ControllerBase
+public class ContactInfoController(IContactInfoRepository contactInfoRepository) 
+    : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<ContactInfo>> GetContactInfo(int businessId)
